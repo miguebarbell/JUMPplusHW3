@@ -12,6 +12,7 @@ import us.debloat.studentgradebook.models.*;
 import us.debloat.studentgradebook.repositories.ClassRepository;
 import us.debloat.studentgradebook.repositories.UserRepository;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -111,11 +112,19 @@ public class MainService {
 	public void getClassDetails(Long classId) {
 		Optional<Course> classById = classRepository.findById(classId);
 		if (classById.isPresent()) {
-			// TODO: generate the average and median grade
 			List<Grade> grades = classById.get().getGrades()
 			                              .stream()
 			                              .sorted(new GradesComparator())
 			                              .toList();
+			int[] arrayGrades = grades.stream().mapToInt(Grade::getGrade).toArray();
+			double average = Arrays.stream(arrayGrades).average().getAsDouble();
+			int median = arrayGrades.length % 2 != 0 ?
+					arrayGrades[(int) Math.ceil(arrayGrades.length / 2)] :
+					(arrayGrades[(arrayGrades.length / 2) - 1] +
+					arrayGrades[(arrayGrades.length / 2)])/2;
+			Prompt.promptHeader("AVG grade = " + average);
+			Prompt.promptHeader("Median grade = " + median);
+
 			if (grades.size() > 0) {
 				String[][] data = new String[grades.size() + 1][2];
 				data[0][0] = "Grade";
