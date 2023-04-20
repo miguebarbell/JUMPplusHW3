@@ -6,6 +6,7 @@ import org.springframework.shell.table.BorderStyle;
 import org.springframework.shell.table.TableBuilder;
 import org.springframework.shell.table.TableModel;
 import org.springframework.stereotype.Service;
+import us.debloat.studentgradebook.helper.GradesComparator;
 import us.debloat.studentgradebook.helper.Prompt;
 import us.debloat.studentgradebook.models.*;
 import us.debloat.studentgradebook.repositories.ClassRepository;
@@ -108,11 +109,13 @@ public class MainService {
 	}
 
 	public void getClassDetails(Long classId) {
-		// TODO: generate the average and median grade
-		// TODO: sort the students by alphabetical order and by their grade
 		Optional<Course> classById = classRepository.findById(classId);
 		if (classById.isPresent()) {
-			List<Grade> grades = classById.get().getGrades();
+			// TODO: generate the average and median grade
+			List<Grade> grades = classById.get().getGrades()
+			                              .stream()
+			                              .sorted(new GradesComparator())
+			                              .toList();
 			if (grades.size() > 0) {
 				String[][] data = new String[grades.size() + 1][2];
 				data[0][0] = "Grade";
