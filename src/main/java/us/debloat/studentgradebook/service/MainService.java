@@ -121,7 +121,7 @@ public class MainService {
 			int median = arrayGrades.length % 2 != 0 ?
 					arrayGrades[(int) Math.ceil(arrayGrades.length / 2)] :
 					(arrayGrades[(arrayGrades.length / 2) - 1] +
-					arrayGrades[(arrayGrades.length / 2)])/2;
+					 arrayGrades[(arrayGrades.length / 2)]) / 2;
 			Prompt.promptHeader("AVG grade = " + average);
 			Prompt.promptHeader("Median grade = " + median);
 
@@ -175,7 +175,15 @@ public class MainService {
 		studentById.ifPresent(user ->
 				classRepository.findById(courseId)
 				               .ifPresent(course -> {
-					               course.addStudent(studentGrade, (Student) user);
+					               Optional<Grade> first =
+							               course.getGrades().stream()
+							                     .filter(grade -> grade.getStudent().getId().equals(studentId))
+							                     .findFirst();
+					               if (first.isPresent()) {
+						               first.get().setGrade(studentGrade);
+					               } else {
+						               course.addStudent(studentGrade, (Student) user);
+					               }
 					               classRepository.save(course);
 				               }));
 	}
