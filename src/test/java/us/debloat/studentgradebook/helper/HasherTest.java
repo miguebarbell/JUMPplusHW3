@@ -24,4 +24,9 @@ class HasherTest {
 		String progresstracker = hasher.hasher("progresstracker");
 		assert ("4d08198f9d82f17046def6bd6072e05418a47301444aa767aa4e086fa954c3b7".equals(progresstracker));
 	}
+
+	@Test
+	void thisistrue() {
+		assert true;
+	}
 }

@@ -5,6 +5,7 @@ import org.springframework.shell.standard.ShellCommandGroup;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
+import us.debloat.studentgradebook.models.Student;
 import us.debloat.studentgradebook.models.UserTypes;
 import us.debloat.studentgradebook.service.MainService;
 import us.debloat.studentgradebook.service.StudentService;
@@ -23,7 +24,7 @@ public class StudentCommands {
 	@ShellMethod(key = "grades", value = "Displays student grades.")
 	@ShellMethodAvailability("studentCheck")
 	public void displayGrades() {
-		studentService.getGrades(MainService.user);
+		studentService.getGrades((Student) MainService.user);
 	}
 
 	public Availability studentCheck() {

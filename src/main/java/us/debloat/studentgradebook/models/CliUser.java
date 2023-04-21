@@ -1,26 +1,17 @@
 package us.debloat.studentgradebook.models;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import lombok.Data;
 
-@NoArgsConstructor
-@Getter
-@Setter
+@Data
 @Entity
 public class CliUser {
-	@Column(nullable = false, unique = true)
-	@NotBlank @NotEmpty @NotNull String name;
-	@NotNull
-	@Enumerated
-	@Column(nullable = false)
 	UserTypes userType;
+	@Column(unique = true)
+	String name;
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", nullable = false)
-	private Long id;
+	@Column(updatable = false, nullable = false, name = "id", unique = true)
+	String id;
 }

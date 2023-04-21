@@ -23,16 +23,16 @@ public class Course {
 	List<Grade> grades = new ArrayList<>();
 	@ManyToOne(cascade = {CascadeType.PERSIST})
 	@JoinColumn
-	Teacher teacher;
+	CliUser teacher;
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "id", nullable = false)
 	private Long id;
 
-	public void addStudentGrade(Integer studentGrade, Student user) {
+	public void addStudentGrade(Integer studentGrade, CliUser user) {
 		grades.add(new Grade(user , studentGrade));
 	}
-	public void deleteStudent(Long studentId) {
+	public void deleteStudent(String studentId) {
 		grades = this.grades.stream().filter(grade -> !grade.getStudent().getId().equals(studentId)).toList();
 	}
 

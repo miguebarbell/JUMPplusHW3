@@ -7,8 +7,9 @@ import us.debloat.studentgradebook.models.UserTypes;
 
 import java.util.List;
 
-public interface UserRepository extends JpaRepository<CliUser, Long> {
+public interface UserRepository extends JpaRepository<CliUser, String> {
 
-	@Query("select c from CliUser c where c.userType = ?1")
-	List<CliUser> findByUserType(UserTypes type);
+//	@Query("select c from CliUser c where c.userType = ?1")
+@Query("select c from CliUser c where c.userType = ?1")
+List<CliUser> findByUserType(UserTypes type);
 }

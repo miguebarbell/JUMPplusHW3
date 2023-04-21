@@ -48,7 +48,7 @@ public class TeacherService {
 	}
 
 
-	public void addStudent(Long studentId, Integer studentGrade, Long courseId) {
+	public void addStudent(String studentId, Integer studentGrade, Long courseId) {
 		Optional<CliUser> studentById = userRepository.findById(studentId);
 		studentById.ifPresent(user ->
 				classRepository.findById(courseId)
@@ -60,7 +60,7 @@ public class TeacherService {
 					               if (first.isPresent()) {
 						               first.get().setGrade(studentGrade);
 					               } else {
-						               course.addStudentGrade(studentGrade, (Student) user);
+						               course.addStudentGrade(studentGrade,user);
 					               }
 					               classRepository.save(course);
 				               }));
@@ -86,7 +86,7 @@ public class TeacherService {
 			data[0][4] = "Students";
 			for (int i = 0; i < all.size(); i++) {
 				Course classById = classRepository.findById(all.get(i).getId()).get();
-				Teacher teacher = all.get(i).getTeacher();
+				CliUser teacher = all.get(i).getTeacher();
 				data[i + 1][0] = all.get(i).getId().toString();
 				data[i + 1][1] = null == teacher ? "Not Assigned" : teacher.getName();
 				data[i + 1][2] = all.get(i).getName();
@@ -105,7 +105,7 @@ public class TeacherService {
 	public void assignClassToTeacher(Long classId) {
 		Optional<Course> classById = classRepository.findById(classId);
 		if (classById.isPresent()) {
-			classById.get().setTeacher((Teacher) MainService.user);
+			classById.get().setTeacher(MainService.user);
 			classRepository.save(classById.get());
 			Prompt.promptFeedback("Class " + classById.get().getName() + " has been assigned to you.");
 		} else {
@@ -148,12 +148,12 @@ public class TeacherService {
 		}
 	}
 
-	public void removeStudent(Long studentId) {
+	public void removeStudent(String studentId) {
 		userRepository.findById(studentId).ifPresent(cliUser -> {
 					classRepository.findAll().forEach(course -> {
 						course.deleteStudent(studentId);
 						classRepository.save(course);
-						gradeRepository.deleteByStudent((Student) cliUser);
+						gradeRepository.deleteByStudent(cliUser);
 					});
 					userRepository.delete(cliUser);
 				}

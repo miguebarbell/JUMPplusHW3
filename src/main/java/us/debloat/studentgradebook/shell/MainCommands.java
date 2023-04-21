@@ -31,7 +31,7 @@ public class MainCommands implements PromptProvider {
 
 	@ShellMethod(key = "login", value = "Login as student or teacher")
 	@ShellMethodAvailability("loginCheck")
-	public void login(@ShellOption(arity = 1) Long userId) {
+	public void login(@ShellOption(arity = 1) String userId) {
 		mainService.login(userId);
 	}
 

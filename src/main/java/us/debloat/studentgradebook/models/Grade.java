@@ -9,7 +9,7 @@ import lombok.Data;
 public class Grade {
 	@ManyToOne
 	@JoinColumn(name = "student_id")
-	private Student student;
+	private CliUser student;
 	private Integer grade;
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -20,7 +20,7 @@ public class Grade {
 
 	}
 
-	public Grade(Student student, Integer grade) {
+	public Grade(CliUser student, Integer grade) {
 		this.student = student;
 		this.grade = grade;
 	}

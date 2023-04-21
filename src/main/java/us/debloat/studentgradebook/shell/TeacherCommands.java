@@ -24,7 +24,7 @@ public class TeacherCommands {
 	public void addStudent(
 			@ShellOption(value = {"-s", "--student"},
 					arity = 1,
-					help = "This is the student ID") Long studentId,
+					help = "This is the student ID") String studentId,
 			@ShellOption(value = {"-g", "--grad"},
 					arity = 1,
 					help = "Student grade") Integer studentGrade,
@@ -37,7 +37,7 @@ public class TeacherCommands {
 
 	@ShellMethod(value = "Remove a student.")
 	@ShellMethodAvailability("teacherCheck")
-	public void removeStudent(Long studentId) {
+	public void removeStudent(String studentId) {
 		teacherService.removeStudent(studentId);
 
 	}

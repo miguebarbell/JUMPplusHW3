@@ -3,7 +3,6 @@ package us.debloat.studentgradebook.service;
 import org.springframework.stereotype.Service;
 import us.debloat.studentgradebook.helper.MenuParser;
 import us.debloat.studentgradebook.helper.Prompt;
-import us.debloat.studentgradebook.models.CliUser;
 import us.debloat.studentgradebook.models.Course;
 import us.debloat.studentgradebook.models.Student;
 import us.debloat.studentgradebook.repositories.ClassRepository;
@@ -20,7 +19,7 @@ public class StudentService {
 		this.classRepository = classRepository;
 	}
 
-	public void getGrades(CliUser student) {
+	public void getGrades(Student student) {
 		List<Course> byGradesStudent = classRepository.findByGrades_Student((Student) student);
 		List<List<String>> listData = new ArrayList<>();
 		listData.add(new ArrayList<>());
