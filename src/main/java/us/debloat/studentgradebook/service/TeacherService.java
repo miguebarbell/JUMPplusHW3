@@ -1,6 +1,5 @@
 package us.debloat.studentgradebook.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import us.debloat.studentgradebook.helper.GradesComparator;
 import us.debloat.studentgradebook.helper.Prompt;
@@ -18,11 +17,15 @@ import static us.debloat.studentgradebook.helper.MenuParser.printTable;
 
 @Service
 public class TeacherService {
-	@Autowired
-	ClassRepository classRepository;
+	private final ClassRepository classRepository;
 
-	@Autowired
-	UserRepository userRepository;
+	private final UserRepository userRepository;
+
+	public TeacherService(ClassRepository classRepository, UserRepository userRepository) {
+		this.classRepository = classRepository;
+		this.userRepository = userRepository;
+	}
+
 	public void listAllStudents() {
 		List<CliUser> byUserType = userRepository.findByUserType(UserTypes.STUDENT);
 		if (byUserType.isEmpty()) {
@@ -107,6 +110,7 @@ public class TeacherService {
 	public void getClassDetails(Long classId) {
 	Optional<Course> classById = classRepository.findById(classId);
 	if (classById.isPresent()) {
+		Prompt.promptHeader("Details for: " + classById.get().getName());
 		List<Grade> grades = classById.get().getGrades()
 		                              .stream()
 		                              .sorted(new GradesComparator())
@@ -123,7 +127,7 @@ public class TeacherService {
 		if (grades.size() > 0) {
 			String[][] data = new String[grades.size() + 1][2];
 			data[0][0] = "Grade";
-			data[0][1] = "Name";
+			data[0][1] = "Student";
 			AtomicInteger index = new AtomicInteger(1);
 			grades.forEach(grade -> {
 				data[index.get()][0] = grade.getGrade().toString();
