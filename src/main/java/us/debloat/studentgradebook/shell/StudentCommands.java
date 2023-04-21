@@ -1,26 +1,33 @@
 package us.debloat.studentgradebook.shell;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.Availability;
 import org.springframework.shell.standard.ShellCommandGroup;
 import org.springframework.shell.standard.ShellComponent;
+import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellMethodAvailability;
 import us.debloat.studentgradebook.models.UserTypes;
 import us.debloat.studentgradebook.service.MainService;
+import us.debloat.studentgradebook.service.StudentService;
 
 @ShellComponent
 @ShellCommandGroup(value = "students")
 public class StudentCommands {
-	@Autowired
-	MainService mainService;
+	final MainService mainService;
+	final StudentService studentService;
 
-//	@ShellMethod(key = "login", value = "self explanatory")
-//	@ShellMethodAvailability("loginCheck")
-//	public void login() {
-//		mainService.login();
-//	}
+	public StudentCommands(MainService mainService, StudentService studentService) {
+		this.mainService = mainService;
+		this.studentService = studentService;
+	}
+
+	@ShellMethod(key = "grades", value = "Displays student grades.")
+	@ShellMethodAvailability("loginCheck")
+	public void displayGrades() {
+		studentService.getGrades(MainService.user);
+	}
 
 	public Availability studentCheck() {
-		return mainService.user != null && mainService.user.getUserType() == UserTypes.STUDENT ?
+		return MainService.user != null && MainService.user.getUserType() == UserTypes.STUDENT ?
 				Availability.available() : Availability.unavailable("Not a Student");
 	}
 }
