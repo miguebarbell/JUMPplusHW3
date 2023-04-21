@@ -6,12 +6,15 @@ import org.springframework.shell.standard.*;
 import us.debloat.studentgradebook.models.Course;
 import us.debloat.studentgradebook.models.UserTypes;
 import us.debloat.studentgradebook.service.MainService;
+import us.debloat.studentgradebook.service.TeacherService;
 
 @ShellComponent
-@ShellCommandGroup(value = "teachers")
+@ShellCommandGroup(value = "Teacher Commands")
 public class TeacherCommands {
 	@Autowired
 	MainService mainService;
+	@Autowired
+	TeacherService teacherService;
 
 	// FIXME: better name for this method, is related to add a grade to an student.
 	@ShellMethod(value = "Add students to a course, and manage their grades.")
@@ -27,21 +30,21 @@ public class TeacherCommands {
 					arity = 1,
 					help = "Course Id") Long courseId
 	) {
-		mainService.addStudent(studentId, studentGrade, courseId);
+		teacherService.addStudent(studentId, studentGrade, courseId);
 	}
 	// TODO: create method to remove an student
 
 	@ShellMethod(key = "students", value = "Get all the students")
 	@ShellMethodAvailability("teacherCheck")
 	public void students() {
-		mainService.listAllStudents();
+		teacherService.listAllStudents();
 	}
 
 
 	@ShellMethod(key = "courses", value = "List of courses")
 	@ShellMethodAvailability("teacherCheck")
 	public void listOfClasses() {
-		mainService.listOfClasses();
+		teacherService.listOfClasses();
 	}
 
 	@ShellMethod(key = "class", value = "Create, assign a class")
@@ -58,11 +61,11 @@ public class TeacherCommands {
 			@ShellOption(value = {"-a", "--assign"}, arity = 1, defaultValue = ShellOption.NULL,
 					help = "Assign this class to you.") Long assignClass) {
 		if (null != newClass) {
-			Course course = mainService.createClass(newClass);
+			Course course = teacherService.createClass(newClass);
 		} else if (null != assignClass) {
-			mainService.assignClassToTeacher(assignClass);
+			teacherService.assignClassToTeacher(assignClass);
 		} else {
-			mainService.getClassDetails(getClass);
+			teacherService.getClassDetails(getClass);
 		}
 	}
 
