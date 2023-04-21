@@ -1,6 +1,5 @@
 package us.debloat.studentgradebook.shell;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.Availability;
 import org.springframework.shell.standard.*;
 import us.debloat.studentgradebook.models.Course;
@@ -11,13 +10,16 @@ import us.debloat.studentgradebook.service.TeacherService;
 @ShellComponent
 @ShellCommandGroup(value = "Teacher Commands")
 public class TeacherCommands {
-	@Autowired
-	MainService mainService;
-	@Autowired
-	TeacherService teacherService;
+	private final	MainService mainService;
+	private final TeacherService teacherService;
+
+	public TeacherCommands(MainService mainService, TeacherService teacherService) {
+		this.mainService = mainService;
+		this.teacherService = teacherService;
+	}
 
 	// FIXME: better name for this method, is related to add a grade to an student.
-	@ShellMethod(value = "Add students to a course, and manage their grades.")
+	@ShellMethod(key="student", value = "Add students to a course, and manage their grades.")
 	@ShellMethodAvailability("teacherCheck")
 	public void addStudent(
 			@ShellOption(value = {"-s", "--student"},
@@ -32,7 +34,13 @@ public class TeacherCommands {
 	) {
 		teacherService.addStudent(studentId, studentGrade, courseId);
 	}
-	// TODO: create method to remove an student
+
+	@ShellMethod(value = "Remove a student.")
+	@ShellMethodAvailability("teacherCheck")
+	public void removeStudent(Long studentId) {
+		teacherService.removeStudent(studentId);
+
+	}
 
 	@ShellMethod(key = "students", value = "Get all the students")
 	@ShellMethodAvailability("teacherCheck")

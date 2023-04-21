@@ -23,6 +23,10 @@ public class Course {
 
 	public void addStudent(Integer studentGrade, Student user) {
 		//TODO: create or update
+
 		grades.add(new Grade(user , studentGrade));
+	}
+	public void deleteStudent(Long studentId) {
+		grades = this.grades.stream().filter(grade -> !grade.getStudent().getId().equals(studentId)).toList();
 	}
 }

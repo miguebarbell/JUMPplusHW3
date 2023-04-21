@@ -5,6 +5,7 @@ import us.debloat.studentgradebook.helper.GradesComparator;
 import us.debloat.studentgradebook.helper.Prompt;
 import us.debloat.studentgradebook.models.*;
 import us.debloat.studentgradebook.repositories.ClassRepository;
+import us.debloat.studentgradebook.repositories.GradeRepository;
 import us.debloat.studentgradebook.repositories.UserRepository;
 
 import java.util.Arrays;
@@ -20,10 +21,12 @@ public class TeacherService {
 	private final ClassRepository classRepository;
 
 	private final UserRepository userRepository;
+	private final	GradeRepository gradeRepository;
 
-	public TeacherService(ClassRepository classRepository, UserRepository userRepository) {
+	public TeacherService(ClassRepository classRepository, UserRepository userRepository, GradeRepository gradeRepository) {
 		this.classRepository = classRepository;
 		this.userRepository = userRepository;
+		this.gradeRepository = gradeRepository;
 	}
 
 	public void listAllStudents() {
@@ -62,11 +65,13 @@ public class TeacherService {
 					               classRepository.save(course);
 				               }));
 	}
+
 	public Course createClass(String newClass) {
 		Course course = new Course();
 		course.setName(newClass);
 		return classRepository.save(course);
 	}
+
 	public void listOfClasses() {
 		List<Course> all = classRepository.findAll();
 		if (all.isEmpty()) {
@@ -108,37 +113,49 @@ public class TeacherService {
 	}
 
 	public void getClassDetails(Long classId) {
-	Optional<Course> classById = classRepository.findById(classId);
-	if (classById.isPresent()) {
-		Prompt.promptHeader("Details for: " + classById.get().getName());
-		List<Grade> grades = classById.get().getGrades()
-		                              .stream()
-		                              .sorted(new GradesComparator())
-		                              .toList();
-		int[] arrayGrades = grades.stream().mapToInt(Grade::getGrade).toArray();
-		double average = Arrays.stream(arrayGrades).average().getAsDouble();
-		int median = arrayGrades.length % 2 != 0 ?
-				arrayGrades[(int) Math.ceil(arrayGrades.length / 2)] :
-				(arrayGrades[(arrayGrades.length / 2) - 1] +
-				 arrayGrades[(arrayGrades.length / 2)]) / 2;
-		Prompt.promptHeader("AVG grade = " + average);
-		Prompt.promptHeader("Median grade = " + median);
+		Optional<Course> classById = classRepository.findById(classId);
+		if (classById.isPresent()) {
+			Prompt.promptHeader("Details for: " + classById.get().getName());
+			List<Grade> grades = classById.get().getGrades()
+			                              .stream()
+			                              .sorted(new GradesComparator())
+			                              .toList();
+			int[] arrayGrades = grades.stream().mapToInt(Grade::getGrade).toArray();
+			double average = Arrays.stream(arrayGrades).average().getAsDouble();
+			int median = arrayGrades.length % 2 != 0 ?
+					arrayGrades[(int) Math.ceil(arrayGrades.length / 2)] :
+					(arrayGrades[(arrayGrades.length / 2) - 1] +
+					 arrayGrades[(arrayGrades.length / 2)]) / 2;
+			Prompt.promptHeader("AVG grade = " + average);
+			Prompt.promptHeader("Median grade = " + median);
 
-		if (grades.size() > 0) {
-			String[][] data = new String[grades.size() + 1][2];
-			data[0][0] = "Grade";
-			data[0][1] = "Student";
-			AtomicInteger index = new AtomicInteger(1);
-			grades.forEach(grade -> {
-				data[index.get()][0] = grade.getGrade().toString();
-				data[index.getAndIncrement()][1] = grade.getStudent().getName();
-			});
-			printTable(data);
+			if (grades.size() > 0) {
+				String[][] data = new String[grades.size() + 1][2];
+				data[0][0] = "Grade";
+				data[0][1] = "Student";
+				AtomicInteger index = new AtomicInteger(1);
+				grades.forEach(grade -> {
+					data[index.get()][0] = grade.getGrade().toString();
+					data[index.getAndIncrement()][1] = grade.getStudent().getName();
+				});
+				printTable(data);
+			} else {
+				Prompt.promptError("No students in this class.");
+			}
 		} else {
-			Prompt.promptError("No students in this class.");
+			Prompt.promptError("Class not found");
 		}
-	} else {
-		Prompt.promptError("Class not found");
 	}
-}
+
+	public void removeStudent(Long studentId) {
+		userRepository.findById(studentId).ifPresent(cliUser -> {
+					classRepository.findAll().forEach(course -> {
+						course.deleteStudent(studentId);
+						classRepository.save(course);
+						gradeRepository.deleteByStudent((Student) cliUser);
+					});
+					userRepository.delete(cliUser);
+				}
+		);
+	}
 }
