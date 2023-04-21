@@ -79,7 +79,7 @@ public class TeacherCommands {
 	}
 
 	public Availability teacherCheck() {
-		return mainService.user != null && mainService.user.getUserType() == UserTypes.TEACHER ?
+		return MainService.user != null && MainService.user.getUserType() == UserTypes.TEACHER ?
 				Availability.available() : Availability.unavailable("Not a Teacher");
 	}
 }
