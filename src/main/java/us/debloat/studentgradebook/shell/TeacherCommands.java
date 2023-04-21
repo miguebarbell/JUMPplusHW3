@@ -2,6 +2,7 @@ package us.debloat.studentgradebook.shell;
 
 import org.springframework.shell.Availability;
 import org.springframework.shell.standard.*;
+import us.debloat.studentgradebook.helper.Prompt;
 import us.debloat.studentgradebook.models.Course;
 import us.debloat.studentgradebook.models.UserTypes;
 import us.debloat.studentgradebook.service.MainService;
@@ -18,7 +19,6 @@ public class TeacherCommands {
 		this.teacherService = teacherService;
 	}
 
-	// FIXME: better name for this method, is related to add a grade to an student.
 	@ShellMethod(key="student", value = "Add students to a course, and manage their grades.")
 	@ShellMethodAvailability("teacherCheck")
 	public void addStudent(
@@ -70,6 +70,7 @@ public class TeacherCommands {
 					help = "Assign this class to you.") Long assignClass) {
 		if (null != newClass) {
 			Course course = teacherService.createClass(newClass);
+			Prompt.promptFeedback("Class created \nClass: " + course.getName() + "\nID: " + course.getId());
 		} else if (null != assignClass) {
 			teacherService.assignClassToTeacher(assignClass);
 		} else {

@@ -60,7 +60,7 @@ public class TeacherService {
 					               if (first.isPresent()) {
 						               first.get().setGrade(studentGrade);
 					               } else {
-						               course.addStudent(studentGrade, (Student) user);
+						               course.addStudentGrade(studentGrade, (Student) user);
 					               }
 					               classRepository.save(course);
 				               }));
@@ -107,6 +107,7 @@ public class TeacherService {
 		if (classById.isPresent()) {
 			classById.get().setTeacher((Teacher) MainService.user);
 			classRepository.save(classById.get());
+			Prompt.promptFeedback("Class " + classById.get().getName() + " has been assigned to you.");
 		} else {
 			Prompt.promptError("Class not found");
 		}

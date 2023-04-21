@@ -21,7 +21,7 @@ public class StudentCommands {
 	}
 
 	@ShellMethod(key = "grades", value = "Displays student grades.")
-	@ShellMethodAvailability("loginCheck")
+	@ShellMethodAvailability("studentCheck")
 	public void displayGrades() {
 		studentService.getGrades(MainService.user);
 	}
