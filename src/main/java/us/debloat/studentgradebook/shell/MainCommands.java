@@ -25,14 +25,20 @@ public class MainCommands implements PromptProvider {
 			@ShellOption(
 					value = {"--student"},
 					arity = 2,
-					defaultValue = "") String student) {
-		mainService.register(teacher, student);
+					defaultValue = "") String student,
+			@ShellOption(
+					value = {"--password"},
+					arity = 1
+			) String password) {
+		mainService.register(teacher, student, password);
 	}
 
 	@ShellMethod(key = "login", value = "Login as student or teacher")
 	@ShellMethodAvailability("loginCheck")
-	public void login(@ShellOption(arity = 1) String userId) {
-		mainService.login(userId);
+	public void login(
+			@ShellOption(arity = 1) String userId,
+			@ShellOption(arity = 1) String password) {
+		mainService.login(userId, password);
 	}
 
 	@ShellMethod(key = "logout", value = "self explanatory")

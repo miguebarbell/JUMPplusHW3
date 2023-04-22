@@ -24,7 +24,7 @@ public class StudentCommands {
 	@ShellMethod(key = "grades", value = "Displays student grades.")
 	@ShellMethodAvailability("studentCheck")
 	public void displayGrades() {
-		studentService.getGrades((Student) MainService.user);
+		studentService.getGrades(MainService.user);
 	}
 
 	public Availability studentCheck() {

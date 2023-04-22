@@ -14,4 +14,5 @@ public class CliUser {
 	@Id
 	@Column(updatable = false, nullable = false, name = "id", unique = true)
 	String id;
+	String password;
 }

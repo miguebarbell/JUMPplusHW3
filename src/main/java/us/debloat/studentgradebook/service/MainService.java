@@ -1,44 +1,57 @@
 package us.debloat.studentgradebook.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import us.debloat.studentgradebook.helper.Prompt;
 import us.debloat.studentgradebook.models.CliUser;
-import us.debloat.studentgradebook.models.Student;
-import us.debloat.studentgradebook.models.Teacher;
+import us.debloat.studentgradebook.models.SecurityUser;
 import us.debloat.studentgradebook.models.UserTypes;
-import us.debloat.studentgradebook.repositories.ClassRepository;
 import us.debloat.studentgradebook.repositories.UserRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class MainService {
 	public static CliUser user = null;
-	@Autowired
-	UserRepository userRepository;
-	@Autowired
-	ClassRepository classRepository;
+	private final UserRepository userRepository;
+//	private final ClassRepository classRepository;
+	private final PasswordEncoder passwordEncoder;
+	private final AuthenticationManager authenticationManager;
 
 	public void logout() {
 		Prompt.promptHeader("Bye %s!".formatted(user.getName()));
+		SecurityContextHolder.clearContext();
 		user = null;
 	}
 
-	public void login(String userId) {
-		Optional<CliUser> byId = userRepository.findById(userId);
-		if (byId.isPresent()) {
-			user = byId.get();
-			Prompt.promptFeedback("Welcome " + byId.get().getName() + ", you are our best " + user.getUserType());
-		} else {
-			Prompt.promptError("Could not find user");
+	public void login(String userId, String password) {
+//		Optional<CliUser> byId = userRepository.findById(userId);
+//		if (byId.isPresent()) {
+			Authentication request = new UsernamePasswordAuthenticationToken(userId, password);
+			try {
+				Authentication result = authenticationManager.authenticate(request);
+				SecurityContextHolder.getContext().setAuthentication(result);
+				SecurityUser principal = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+				user = principal.getUser();
+				Prompt.promptFeedback("Welcome " + user.getName() + ", you are our best " + user.getUserType());
+			} catch (AuthenticationException e) {
+				Prompt.promptError("Bad Credentials");
+			}
 		}
-	}
+//		else {
+//		}
+//	}
 
 
 
-	public void register(String teacher, String student) {
+	public void register(String teacher, String student, String password) {
 		if (student == null || teacher == null) {
 			Prompt.promptError("Please provide a name");
 		} else if (student.equals("") && teacher.equals("")) {
@@ -59,6 +72,7 @@ public class MainService {
 					newTeacher.setId(teacherPrefix + "01");
 				}
 				newTeacher.setUserType(UserTypes.TEACHER);
+				newTeacher.setPassword(passwordEncoder.encode(password));
 				userRepository.save(newTeacher);
 				Prompt.promptHeader(newTeacher.getUserType() + ": "+newTeacher.getName()+"\nID: " + newTeacher.getId());
 			} else {
@@ -72,8 +86,8 @@ public class MainService {
 					newStudent.setId(studentPrefix + "01");
 				}
 				newStudent.setUserType(UserTypes.STUDENT);
+				newStudent.setPassword(passwordEncoder.encode(password));
 				userRepository.save(newStudent);
-
 				Prompt.promptHeader(newStudent.getUserType() + ": "+newStudent.getName()+"\nID: " + newStudent.getId());
 			}
 		}
