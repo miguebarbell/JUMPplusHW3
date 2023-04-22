@@ -19,15 +19,15 @@ public class MainCommands implements PromptProvider {
 
 	@ShellMethod(key = "register", value = "Register a new Student or Teacher")
 	public void register(
-			@ShellOption(value = {"--teacher"},
+			@ShellOption(value = {"--teacher", "-t"},
 					arity = 2,
 					defaultValue = "") String teacher,
 			@ShellOption(
-					value = {"--student"},
+					value = {"--student", "-s"},
 					arity = 2,
 					defaultValue = "") String student,
 			@ShellOption(
-					value = {"--password"},
+					value = {"-p", "--password"},
 					arity = 1
 			) String password) {
 		mainService.register(teacher, student, password);
