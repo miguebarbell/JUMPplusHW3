@@ -5,7 +5,6 @@ import org.springframework.shell.standard.ShellCommandGroup;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
-import us.debloat.studentgradebook.models.Student;
 import us.debloat.studentgradebook.models.UserTypes;
 import us.debloat.studentgradebook.service.MainService;
 import us.debloat.studentgradebook.service.StudentService;

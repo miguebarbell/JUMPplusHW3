@@ -5,7 +5,6 @@ import us.debloat.studentgradebook.helper.MenuParser;
 import us.debloat.studentgradebook.helper.Prompt;
 import us.debloat.studentgradebook.models.CliUser;
 import us.debloat.studentgradebook.models.Course;
-import us.debloat.studentgradebook.models.Student;
 import us.debloat.studentgradebook.repositories.ClassRepository;
 
 import java.util.ArrayList;

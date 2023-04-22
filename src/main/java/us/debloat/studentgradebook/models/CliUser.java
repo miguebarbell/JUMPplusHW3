@@ -3,16 +3,18 @@ package us.debloat.studentgradebook.models;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
 public class CliUser {
-	UserTypes userType;
+	private UserTypes userType;
 	@Column(unique = true)
-	String name;
+	private String name;
 	@Id
 	@Column(updatable = false, nullable = false, name = "id", unique = true)
-	String id;
-	String password;
+	private String id;
+	private String password;
 }

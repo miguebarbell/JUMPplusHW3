@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 import us.debloat.studentgradebook.models.CliUser;
 import us.debloat.studentgradebook.models.Grade;
-import us.debloat.studentgradebook.models.Student;
 
 public interface GradeRepository extends JpaRepository<Grade, Long> {
 	@Transactional

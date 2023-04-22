@@ -49,26 +49,26 @@ public class MainCommands implements PromptProvider {
 
 	@Override
 	public AttributedString getPrompt() {
-		return mainService.user == null ?
+		return MainService.user == null ?
 				new AttributedString(prompt + " >",
 						AttributedStyle.DEFAULT.foreground(AttributedStyle.RED)) :
-				new AttributedString(mainService.user.getName() + " >",
+				new AttributedString(MainService.user.getName() + " >",
 						AttributedStyle.INVERSE.foreground(AttributedStyle.GREEN));
 	}
 
 
 	public Availability adminCheck() {
-		return mainService.user != null && mainService.user.getUserType() == UserTypes.ADMIN ?
+		return MainService.user != null && MainService.user.getUserType() == UserTypes.ADMIN ?
 				Availability.available() : Availability.unavailable("Not an Admin");
 	}
 
 	public Availability logoutCheck() {
-		return mainService.user != null ?
+		return MainService.user != null ?
 				Availability.available() : Availability.unavailable("Not logged in");
 	}
 
 	public Availability loginCheck() {
-		return mainService.user == null ?
+		return MainService.user == null ?
 				Availability.available() : Availability.unavailable("Already logged in");
 	}
 }

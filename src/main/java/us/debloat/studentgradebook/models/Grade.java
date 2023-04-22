@@ -1,11 +1,14 @@
 package us.debloat.studentgradebook.models;
 
-
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class Grade {
 	@ManyToOne
 	@JoinColumn(name = "student_id")
@@ -16,22 +19,9 @@ public class Grade {
 	@Column(name = "id", nullable = false)
 	private Long id;
 
-	public Grade() {
-
-	}
-
 	public Grade(CliUser student, Integer grade) {
 		this.student = student;
 		this.grade = grade;
 	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 
 }

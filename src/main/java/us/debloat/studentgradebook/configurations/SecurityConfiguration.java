@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 public class SecurityConfiguration {
@@ -23,7 +23,7 @@ public class SecurityConfiguration {
 		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
 		authenticationProvider.setUserDetailsService(userDetailsService);
 		authenticationProvider.setPasswordEncoder(passwordEncoder);
-		ProviderManager authenticationManager = new ProviderManager(Arrays.asList(authenticationProvider));
+		ProviderManager authenticationManager = new ProviderManager(List.of(authenticationProvider));
 		return authenticationManager;
 	}
 }

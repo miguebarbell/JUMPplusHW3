@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import us.debloat.studentgradebook.models.CliUser;
 import us.debloat.studentgradebook.models.Course;
-import us.debloat.studentgradebook.models.Student;
 
 import java.util.List;
 

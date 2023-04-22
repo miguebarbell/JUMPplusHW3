@@ -40,7 +40,7 @@ public class TeacherService {
 			data[0][1] = "Name";
 			for (int i = 0; i < byUserType.size(); i++) {
 				CliUser student = byUserType.get(i);
-				data[i + 1][0] = student.getId().toString();
+				data[i + 1][0] = student.getId();
 				data[i + 1][1] = student.getName();
 			}
 			printTable(data);
