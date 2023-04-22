@@ -1,5 +1,6 @@
 package us.debloat.studentgradebook.shell;
 
+import lombok.AllArgsConstructor;
 import org.springframework.shell.Availability;
 import org.springframework.shell.standard.*;
 import us.debloat.studentgradebook.helper.Prompt;
@@ -9,20 +10,15 @@ import us.debloat.studentgradebook.service.MainService;
 import us.debloat.studentgradebook.service.TeacherService;
 
 @ShellComponent
+@AllArgsConstructor
 @ShellCommandGroup(value = "Teacher Commands")
 public class TeacherCommands {
-	private final	MainService mainService;
 	private final TeacherService teacherService;
-
-	public TeacherCommands(MainService mainService, TeacherService teacherService) {
-		this.mainService = mainService;
-		this.teacherService = teacherService;
-	}
 
 	@ShellMethod(key="student", value = "Add students to a course, and manage their grades.")
 	@ShellMethodAvailability("teacherCheck")
 	public void addStudent(
-			@ShellOption(value = {"-s", "--student"},
+			@ShellOption(
 					arity = 1,
 					help = "This is the student ID") String studentId,
 			@ShellOption(value = {"-g", "--grad"},

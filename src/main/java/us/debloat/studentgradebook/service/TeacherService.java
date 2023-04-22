@@ -127,7 +127,7 @@ public class TeacherService {
 					arrayGrades[(int) Math.ceil(arrayGrades.length / 2)] :
 					(arrayGrades[(arrayGrades.length / 2) - 1] +
 					 arrayGrades[(arrayGrades.length / 2)]) / 2;
-			Prompt.promptHeader("AVG grade = " + average);
+			Prompt.promptHeader("AVG grade = " + String.format("%.1f", average));
 			Prompt.promptHeader("Median grade = " + median);
 
 			if (grades.size() > 0) {
